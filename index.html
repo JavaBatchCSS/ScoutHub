@@ -3,79 +3,102 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ScoutHub — portail des applications ScoutDraft, ScoutCAD et CathIA.">
-  <title>ScoutHub — vos outils de conception</title>
+  <meta name="description" content="ScoutHub : accès aux applications et aux fichiers de votre espace.">
+  <title>ScoutHub</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="./" aria-label="Accueil ScoutHub">
-      <span class="brand-mark">S</span>
-      <span>Scout<span>Hub</span></span>
-    </a>
-    <a class="github-link" href="https://github.com/JavaBatchCSS/ScoutHub">Voir le dépôt <span aria-hidden="true">↗</span></a>
+    <a class="brand" href="./" aria-label="Accueil ScoutHub"><span class="brand-mark">S</span><strong>ScoutHub</strong></a>
+    <a class="repository-link" href="https://github.com/JavaBatchCSS/ScoutHub">Dépôt GitHub ↗</a>
   </header>
 
-  <main>
-    <section class="hero">
-      <p class="eyebrow">L’atelier numérique des scouts</p>
-      <h1>Concevez. Explorez.<br><em>Réalisez.</em></h1>
-      <p class="hero-copy">Un espace simple pour retrouver vos applications de conception et donner vie à vos projets, directement dans votre navigateur.</p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="#applications">Ouvrir les applications <span>↓</span></a>
-        <a class="button button-quiet" href="https://github.com/JavaBatchCSS/ScoutHub">Découvrir ScoutHub <span>↗</span></a>
-      </div>
-    </section>
-
-    <section id="applications" class="apps-section" aria-labelledby="apps-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Votre boîte à outils</p>
-          <h2 id="apps-title">Les applications</h2>
+  <main class="shell">
+    <section class="login-panel" aria-labelledby="welcome-title">
+      <p class="label">Espace de travail</p>
+      <h1 id="welcome-title">Accédez à vos applications et à vos fichiers.</h1>
+      <p class="intro">Saisissez votre adresse e-mail pour retrouver les fichiers associés à votre espace.</p>
+      <form id="login-form" class="login-form">
+        <label for="email">Adresse e-mail</label>
+        <div class="login-row">
+          <input id="email" name="email" type="email" autocomplete="email" required placeholder="vous@exemple.fr">
+          <button type="submit">Entrer</button>
         </div>
-        <p class="section-note">Tout fonctionne sans installation.</p>
-      </div>
-      <div class="app-grid">
-        <a class="app-card draft-card" href="https://javabatchcss.github.io/ScoutDraft/">
-          <div class="card-top"><span class="app-icon">⌁</span><span class="card-arrow">↗</span></div>
-          <div class="card-body">
-            <p class="card-kicker">Dessin technique 2D &amp; 3D</p>
-            <h3>ScoutDraft</h3>
-            <p>Créez des plans, des schémas et des dessins techniques précis dans une interface rapide et accessible.</p>
-          </div>
-          <span class="card-link">Lancer ScoutDraft <span>→</span></span>
-        </a>
-        <a class="app-card cad-card" href="https://javabatchcss.github.io/ScoutCAD/">
-          <div class="card-top"><span class="app-icon">◇</span><span class="card-arrow">↗</span></div>
-          <div class="card-body">
-            <p class="card-kicker">Modélisation paramétrique</p>
-            <h3>ScoutCAD</h3>
-            <p>Imaginez des objets en trois dimensions, construisez vos pièces et explorez vos idées.</p>
-          </div>
-          <span class="card-link">Lancer ScoutCAD <span>→</span></span>
-        </a>
-        <a class="app-card cathia-card" href="https://javabatchcss.github.io/cathia/">
-          <div class="card-top"><span class="app-icon">✦</span><span class="card-arrow">↗</span></div>
-          <div class="card-body">
-            <p class="card-kicker">Conception pour le camp</p>
-            <h3>CathIA</h3>
-            <p>Concevez du mobilier et des installations en froissartage avec plans cotés et bibliothèques de modèles.</p>
-          </div>
-          <span class="card-link">Lancer CathIA <span>→</span></span>
-        </a>
-      </div>
+        <p id="login-status" class="status" role="status"></p>
+      </form>
     </section>
 
-    <section class="principles" aria-label="Principes de ScoutHub">
-      <div><span class="principle-number">01</span><strong>Dans le navigateur</strong><p>Aucun logiciel à installer. Ouvrez un lien et commencez.</p></div>
-      <div><span class="principle-number">02</span><strong>Open source</strong><p>Les projets et leur évolution restent visibles sur GitHub.</p></div>
-      <div><span class="principle-number">03</span><strong>Pour vos projets</strong><p>Du croquis de camp à la pièce paramétrique, un espace pour chaque idée.</p></div>
+    <section id="workspace" class="workspace" hidden>
+      <div class="workspace-heading">
+        <div><p class="label">Votre espace</p><h2 id="workspace-title"></h2></div>
+        <button id="change-email" class="secondary-button" type="button">Changer d’adresse</button>
+      </div>
+      <div class="workspace-grid">
+        <section class="files-panel" aria-labelledby="files-title">
+          <div class="panel-heading"><h3 id="files-title">Mes fichiers</h3><button id="refresh-files" class="text-button" type="button">Actualiser</button></div>
+          <p id="files-status" class="muted">Connexion au dépôt ScoutHub…</p>
+          <ul id="file-list" class="file-list"></ul>
+        </section>
+        <section class="apps-panel" aria-labelledby="apps-title">
+          <div class="panel-heading"><h3 id="apps-title">Mes applications</h3></div>
+          <a class="app-link draft" data-app="https://javabatchcss.github.io/ScoutDraft/" href="https://javabatchcss.github.io/ScoutDraft/"><span class="app-symbol">⌁</span><span><strong>ScoutDraft</strong><small>Dessin technique</small></span><b>↗</b></a>
+          <a class="app-link cad" data-app="https://javabatchcss.github.io/ScoutCAD/" href="https://javabatchcss.github.io/ScoutCAD/"><span class="app-symbol">◇</span><span><strong>ScoutCAD</strong><small>Modélisation paramétrique</small></span><b>↗</b></a>
+          <a class="app-link cathia" data-app="https://javabatchcss.github.io/cathia/" href="https://javabatchcss.github.io/cathia/"><span class="app-symbol">✦</span><span><strong>CathIA</strong><small>Conception pour le camp</small></span><b>↗</b></a>
+        </section>
+      </div>
+      <p class="privacy-note">L’adresse e-mail sert uniquement à retrouver le dossier correspondant dans ScoutHub. Pour enregistrer un fichier, l’application demandera encore un jeton GitHub, utilisé uniquement dans votre navigateur.</p>
     </section>
   </main>
+  <footer>ScoutHub · JavaBatchCSS · <a href="https://github.com/JavaBatchCSS/ScoutHub">Code source</a></footer>
 
-  <footer>
-    <span>ScoutHub · JavaBatchCSS</span>
-    <span>Construit avec GitHub Pages</span>
-  </footer>
+  <script>
+  (() => {
+    const owner = "JavaBatchCSS", repo = "ScoutHub";
+    const $ = id => document.getElementById(id);
+    const emailInput = $("email"), form = $("login-form"), workspace = $("workspace");
+    const cleanEmail = value => value.trim().toLowerCase();
+    const folder = email => `files/${encodeURIComponent(email).replace(/%40/g, "@")}`;
+    const contentsUrl = path => `https://api.github.com/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+    const appUrl = (base, email) => `${base}?email=${encodeURIComponent(email)}`;
+    const showStatus = (element, text, error = false) => { element.textContent = text; element.classList.toggle("error", error); };
+
+    async function listFiles(email) {
+      const status = $("files-status"), list = $("file-list");
+      list.textContent = "";
+      showStatus(status, "Chargement des fichiers…");
+      try {
+        const response = await fetch(contentsUrl(folder(email)), { headers: { Accept: "application/vnd.github+json" } });
+        if (response.status === 404) { showStatus(status, "Aucun fichier enregistré pour cette adresse."); return; }
+        if (!response.ok) throw new Error(`GitHub (${response.status})`);
+        const entries = await response.json();
+        const files = Array.isArray(entries) ? entries.filter(entry => entry.type === "file") : [];
+        if (!files.length) { showStatus(status, "Aucun fichier enregistré pour cette adresse."); return; }
+        files.forEach(file => {
+          const item = document.createElement("li"), link = document.createElement("a");
+          link.href = file.html_url; link.target = "_blank"; link.rel = "noreferrer";
+          link.textContent = file.name; item.append(link); list.append(item);
+        });
+        showStatus(status, `${files.length} fichier${files.length === 1 ? "" : "s"} trouvé${files.length === 1 ? "" : "s"}.`);
+      } catch (error) { showStatus(status, `Impossible de charger les fichiers : ${error.message}`, true); }
+    }
+
+    function openWorkspace(email) {
+      email = cleanEmail(email);
+      if (!emailInput.checkValidity() || !email) { showStatus($("login-status"), "Saisissez une adresse e-mail valide.", true); return; }
+      localStorage.setItem("scouthub.email", email);
+      $("workspace-title").textContent = email;
+      workspace.hidden = false;
+      form.closest(".login-panel").classList.add("compact");
+      document.querySelectorAll("[data-app]").forEach(link => { link.href = appUrl(link.dataset.app, email); });
+      listFiles(email);
+    }
+
+    form.addEventListener("submit", event => { event.preventDefault(); openWorkspace(emailInput.value); });
+    $("change-email").addEventListener("click", () => { workspace.hidden = true; form.closest(".login-panel").classList.remove("compact"); emailInput.focus(); });
+    $("refresh-files").addEventListener("click", () => listFiles(cleanEmail(emailInput.value)));
+    const remembered = new URLSearchParams(location.search).get("email") || localStorage.getItem("scouthub.email");
+    if (remembered) { emailInput.value = remembered; openWorkspace(remembered); }
+  })();
+  </script>
 </body>
 </html>

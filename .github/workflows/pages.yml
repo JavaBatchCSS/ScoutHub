@@ -2,7 +2,7 @@ name: Deploy ScoutHub home page
 
 on:
   push:
-    branches: [master]
+    branches: [scouthub-home]
   workflow_dispatch:
 
 permissions:
