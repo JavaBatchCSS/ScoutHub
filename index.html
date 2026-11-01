@@ -75,8 +75,18 @@
         if (!files.length) { showStatus(status, "Aucun fichier enregistré pour cette adresse."); return; }
         files.forEach(file => {
           const item = document.createElement("li"), link = document.createElement("a");
+          const thumb = document.createElement("span"), info = document.createElement("span");
+          thumb.className = "file-thumb";
+          if (/\.(png|jpe?g|gif|webp|svg)$/i.test(file.name) && file.download_url) {
+            const image = document.createElement("img");
+            image.src = file.download_url; image.alt = `Aperçu de ${file.name}`; thumb.append(image);
+          } else {
+            thumb.textContent = (file.name.split(".").pop() || "fichier").toUpperCase().slice(0, 6);
+          }
+          info.className = "file-info";
+          info.innerHTML = `<strong>${file.name.replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]))}</strong><small>Fichier enregistré dans ScoutHub</small>`;
           link.href = file.html_url; link.target = "_blank"; link.rel = "noreferrer";
-          link.textContent = file.name; item.append(link); list.append(item);
+          link.append(thumb, info); item.append(link); list.append(item);
         });
         showStatus(status, `${files.length} fichier${files.length === 1 ? "" : "s"} trouvé${files.length === 1 ? "" : "s"}.`);
       } catch (error) { showStatus(status, `Impossible de charger les fichiers : ${error.message}`, true); }
